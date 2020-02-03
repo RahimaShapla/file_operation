@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission/permission.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -22,7 +21,7 @@ Future<String> get _localPath async {
 
 class FileState extends State<FilePage> {
 
-  String _fileName = "";
+  String _fileName;
   String _path;
   Map<String, String> _paths;
   String _extension= "";
@@ -34,18 +33,16 @@ class FileState extends State<FilePage> {
   String file;
 
   getFile() async {
-    var permissionNames = await Permission.requestPermissions([PermissionName.Calendar, PermissionName.Camera]);
+   // var permissionNames = await Permission.requestPermissions([PermissionName.Calendar, PermissionName.Camera]);
    // permissionNames.
     file = await FilePicker.getFilePath(type: FileType.ANY );
       setState(() async{
         _fileName =file;
         OpenFile.open(_fileName);
 
-
-
-       final directory = await getApplicationDocumentsDirectory();
+      /* final directory = await getApplicationDocumentsDirectory();
         final _path = directory.path;
-        File('$_path./hello.txt');
+        File('$_path./hello.txt');*/
 
 
       });
@@ -63,7 +60,10 @@ class FileState extends State<FilePage> {
           children: <Widget>[
             InkWell(
               onTap: (){
-                getFile();
+                setState(() {
+                  getFile();
+                });
+
               },
               child: Container(
                 height: 50,
@@ -80,7 +80,8 @@ class FileState extends State<FilePage> {
                width: 400,
                color: Colors.blue,
                child: Text(
-                   _fileName == null ? "peep peep" : _fileName
+                   _fileName == null ? "peep peep" : _fileName,
+                 style: TextStyle(color: Colors.white),
                ),
 
              )
