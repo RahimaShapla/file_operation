@@ -1,13 +1,23 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission/permission.dart';
 
 class FilePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return FileState();
   }
+}
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
 }
 
 class FileState extends State<FilePage> {
@@ -24,11 +34,20 @@ class FileState extends State<FilePage> {
   String file;
 
   getFile() async {
+    var permissionNames = await Permission.requestPermissions([PermissionName.Calendar, PermissionName.Camera]);
+   // permissionNames.
     file = await FilePicker.getFilePath(type: FileType.ANY );
-
-      setState((){
+      setState(() async{
         _fileName =file;
         OpenFile.open(_fileName);
+
+
+
+       final directory = await getApplicationDocumentsDirectory();
+        final _path = directory.path;
+        File('$_path./hello.txt');
+
+
       });
 
   }
@@ -37,7 +56,7 @@ class FileState extends State<FilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: const Text('Pick Any File!!'),
+        title: const Text('HHHHHHHHHHKKKK'),
       ),
       body: Container(
         child: Column(
@@ -71,3 +90,4 @@ class FileState extends State<FilePage> {
     );
   }
 }
+
